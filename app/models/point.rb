@@ -6,13 +6,8 @@ class Point < ActiveRecord::Base
   before_save :update_record
 
   def update_record
-  	#byebug
-  	if User.exists?(user_id)
-  	  record = self.user.total_points.to_i 
-  	  record += value
-  	  self.user.total_points = record
-  	  self.user.save
-  	end
+  	self.user.total_points += value
+  	self.user.save
   end
 
 end

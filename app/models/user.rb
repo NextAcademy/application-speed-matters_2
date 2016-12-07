@@ -2,7 +2,6 @@ class User < ActiveRecord::Base
   has_many :points
 
   validates_presence_of :first_name, :last_name
-  before_create :set_value
 
   validates :username,
             presence: true,
@@ -22,10 +21,7 @@ class User < ActiveRecord::Base
   end
 
   def full_name
-    "#{first_name} #{last_name}"
+    "#{first_name} #{last_name}".freeze
   end
 
-  def set_value
-    self.total_points.to_i 
-  end
 end
