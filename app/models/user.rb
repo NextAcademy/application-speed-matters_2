@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
   has_many :points
 
   validates_presence_of :first_name, :last_name
+  before_create :set_value
 
   validates :username,
             presence: true,
@@ -17,14 +18,14 @@ class User < ActiveRecord::Base
             on: :create
 
   def self.by_total_points
-    joins(:points).group('users.id').order('SUM(points.value) DESC')
-  end
-
-  def total_points
-    self.points.sum(:value)
+    order('total_points DESC')
   end
 
   def full_name
     "#{first_name} #{last_name}"
+  end
+
+  def set_value
+    self.total_points.to_i 
   end
 end
