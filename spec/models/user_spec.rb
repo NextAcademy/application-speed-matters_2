@@ -32,7 +32,6 @@ describe User do
 
   describe '#total_points' do
     let(:user) { create(:user_with_points, :total => 500, :points => 2) }
-
     it 'returns the total points for the user' do
       expect(user.total_points).to eq 500
     end

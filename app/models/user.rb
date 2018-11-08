@@ -1,29 +1,27 @@
 class User < ActiveRecord::Base
   has_many :points
 
-  validates :first_name, presence: true
-  validates :last_name, presence: true
+  validates_presence_of :first_name, :last_name
 
   validates :username,
             presence: true,
             length: { minimum: 2, maximum: 32 },
             format: { with: /^\w+$/, multiline: true },
-            uniqueness: { case_sensitive: false }
+            uniqueness: { case_sensitive: false },
+            on: :create
 
   validates :email,
             presence: true,
             format: { with: /^[\w+\-.]+@[a-z\d\-.]+\.[a-z]+$/i, multiline: true },
-            uniqueness: { case_sensitive: false }
+            uniqueness: { case_sensitive: false },
+            on: :create
 
   def self.by_total_points
-    joins(:points).group('users.id').order('SUM(points.value) DESC')
-  end
-
-  def total_points
-    self.points.sum(:value)
+    order('total_points DESC')
   end
 
   def full_name
-    "#{first_name} #{last_name}"
+    "#{first_name} #{last_name}".freeze
   end
+
 end
